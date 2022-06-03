@@ -39,8 +39,17 @@ namespace Pharmacy.Controllers
         // GET: Purchases/Create
         public ActionResult Create()
         {
-            ViewBag.MedicineId = new SelectList(db.Medicines, "Id", "Name");
+            LoadMedicinesDDL();
             return View();
+        }
+
+        private void LoadMedicinesDDL()
+        {
+            Medicine emptyMedicines = new Medicine { Id = -1, Name = "Select any Medicine" };
+
+            var allMedicines = db.Medicines.ToList();
+            allMedicines.Insert(0, emptyMedicines);
+            ViewBag.MedicineId = new SelectList(allMedicines, "Id", "Name");
         }
 
         // POST: Purchases/Create
@@ -48,10 +57,42 @@ namespace Pharmacy.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,UnitPrice,ExpiryDate,PurchaseDate,Quantity,Reciept,SupplierName,SupplierContact,MedicineId")] Purchase purchase)
+        public ActionResult Create([Bind(Include = "Purchase,MedicineName,ShelfLetter")] PurchaseView purchaseView)
         {
+
+            LoadMedicinesDDL();
+            Purchase purchase = purchaseView.Purchase;
             if (ModelState.IsValid)
             {
+                Shelf shelf = db.Shelves
+                    .Where(sh => sh.ShelfLetter == purchaseView.ShelfLetter)
+                    .FirstOrDefault();
+
+                if (shelf == null)
+                {                
+                    shelf = new Shelf
+                    {
+                        ShelfLetter = purchaseView.ShelfLetter
+                    };
+                    db.Shelves.Add(shelf);
+                    db.SaveChanges();
+                }
+
+                if (!string.IsNullOrWhiteSpace(purchaseView.MedicineName))
+                {
+                    Medicine medicine = new Medicine
+                    {
+                        Name = purchaseView.MedicineName,
+                        MedicineType = ""
+                    };
+                     
+                    db.Medicines.Add(medicine);
+                    db.SaveChanges();
+                    purchase.MedicineId = medicine.Id;
+
+                }
+
+
                 db.Purchases.Add(purchase);
                 db.SaveChanges(); 
                 
@@ -65,16 +106,23 @@ namespace Pharmacy.Controllers
                 }
                 else
                 {
-                    StockMedicine sm = new StockMedicine { Id = purchase.MedicineId, Quantity = purchase.Quantity, ShelfId = purchase.Medicine.Name[0] };
+                    Medicine Medicine = db.Medicines.Find(purchase.MedicineId);
+
+                    StockMedicine sm = new StockMedicine 
+                    { 
+                        Id = purchase.MedicineId, 
+                        Quantity = purchase.Quantity, 
+                        ShelfId = shelf.Id 
+                                    
+                    };
                     db.StockMedicines.Add(sm);
                     db.SaveChanges();
                 }
 
-
-                return RedirectToAction("Index");
+                return RedirectToAction("Index","StockMedicines");
             }
 
-            ViewBag.MedicineId = new SelectList(db.Medicines, "Id", "Name", purchase.MedicineId);
+
             return View(purchase);
         }
 

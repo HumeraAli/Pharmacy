@@ -131,10 +131,15 @@
     <Compile Include="Controllers\MedicinesController.cs" />
     <Compile Include="Controllers\PurchasesController.cs" />
     <Compile Include="Controllers\SalesController.cs" />
+    <Compile Include="Controllers\ShelvesController.cs" />
     <Compile Include="Controllers\StockMedicinesController.cs" />
     <Compile Include="Migrations\202206012019518_Entities Medicine StockMedicine Sales Purchase Shelf.cs" />
     <Compile Include="Migrations\202206012019518_Entities Medicine StockMedicine Sales Purchase Shelf.Designer.cs">
       <DependentUpon>202206012019518_Entities Medicine StockMedicine Sales Purchase Shelf.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202206030759442_correct relationship from medicine to stock.cs" />
+    <Compile Include="Migrations\202206030759442_correct relationship from medicine to stock.Designer.cs">
+      <DependentUpon>202206030759442_correct relationship from medicine to stock.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ContextDB.cs" />
@@ -145,6 +150,7 @@
     <Compile Include="Models\Company.cs" />
     <Compile Include="Models\Medicine.cs" />
     <Compile Include="Models\Purchase.cs" />
+    <Compile Include="Models\PurchaseView.cs" />
     <Compile Include="Models\Sales.cs" />
     <Compile Include="Models\Shelf.cs" />
     <Compile Include="Models\StockMedicine.cs" />
@@ -201,6 +207,11 @@
     <Content Include="Views\Purchases\Details.cshtml" />
     <Content Include="Views\Purchases\Edit.cshtml" />
     <Content Include="Views\Purchases\Index.cshtml" />
+    <Content Include="Views\Shelves\Create.cshtml" />
+    <Content Include="Views\Shelves\Delete.cshtml" />
+    <Content Include="Views\Shelves\Details.cshtml" />
+    <Content Include="Views\Shelves\Edit.cshtml" />
+    <Content Include="Views\Shelves\Index.cshtml" />
     <Content Include="Views\Sales\Create.cshtml" />
     <Content Include="Views\Sales\Delete.cshtml" />
     <Content Include="Views\Sales\Details.cshtml" />
@@ -229,6 +240,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\202206012019518_Entities Medicine StockMedicine Sales Purchase Shelf.resx">
       <DependentUpon>202206012019518_Entities Medicine StockMedicine Sales Purchase Shelf.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202206030759442_correct relationship from medicine to stock.resx">
+      <DependentUpon>202206030759442_correct relationship from medicine to stock.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
