@@ -6,7 +6,9 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+
 using Pharmacy.Models;
+using Services;
 
 namespace Pharmacy.Controllers
 {
@@ -39,7 +41,7 @@ namespace Pharmacy.Controllers
         // GET: Sales/Create
         public ActionResult Create()
         {
-            ViewBag.StockMedicineId = new SelectList(db.StockMedicines, "Id", "Id");
+            ViewBag.StockMedicineId = new SelectList(db.StockMedicines.Include(s => s.Medicine).Select(sm=>sm.Medicine), "Id", "Name");
             return View();
         }
 
@@ -50,14 +52,32 @@ namespace Pharmacy.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,SalesDate,Quantity,CustomerContact,CustomerName,Price,Amount,Discount,StockMedicineId")] Sales sales)
         {
+
+            var items = db.StockMedicines.Include(s => s.Medicine).Select(sm => sm.Medicine).ToList();
             if (ModelState.IsValid)
             {
+
                 db.Sales.Add(sales);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                StockMedicine stockMedicine = db.StockMedicines.Find(sales.StockMedicineId);
+
+                if (stockMedicine != null)
+                {
+                    stockMedicine.Quantity = stockMedicine.Quantity - sales.Quantity;
+                    db.Entry(stockMedicine).State = EntityState.Modified;
+                    db.SaveChanges();
+                    if (stockMedicine.Quantity <= stockMedicine.MinQuantity)
+                    {
+                        var medicineName = items.Find(m => m.Id == stockMedicine.Id).Name;
+                       new StockAlertService().SendNotification(medicineName, stockMedicine.Quantity);
+                    }  
+                    
+                    return RedirectToAction("Index");
+                }
+
             }
 
-            ViewBag.StockMedicineId = new SelectList(db.StockMedicines, "Id", "Id", sales.StockMedicineId);
+            ViewBag.StockMedicineId = new SelectList(items, "Id", "Name");
             return View(sales);
         }
 
@@ -73,7 +93,10 @@ namespace Pharmacy.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.StockMedicineId = new SelectList(db.StockMedicines, "Id", "Id", sales.StockMedicineId);
+            ViewBag.StockMedicineId = new SelectList
+             (db.StockMedicines.Include(s => s.Medicine).Select(sm => sm.Medicine), "Id", "Name");
+
+
             return View(sales);
         }
 

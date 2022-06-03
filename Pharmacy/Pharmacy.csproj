@@ -141,6 +141,10 @@
     <Compile Include="Migrations\202206030759442_correct relationship from medicine to stock.Designer.cs">
       <DependentUpon>202206030759442_correct relationship from medicine to stock.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202206031540170_new field minQuantity for sending notification.cs" />
+    <Compile Include="Migrations\202206031540170_new field minQuantity for sending notification.Designer.cs">
+      <DependentUpon>202206031540170_new field minQuantity for sending notification.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ContextDB.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -244,6 +248,15 @@
     <EmbeddedResource Include="Migrations\202206030759442_correct relationship from medicine to stock.resx">
       <DependentUpon>202206030759442_correct relationship from medicine to stock.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202206031540170_new field minQuantity for sending notification.resx">
+      <DependentUpon>202206031540170_new field minQuantity for sending notification.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ClassLibrary1\Services.csproj">
+      <Project>{CF5393E5-8353-4504-A6F4-DD4D5C72A213}</Project>
+      <Name>Services</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

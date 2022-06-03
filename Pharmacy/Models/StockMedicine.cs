@@ -14,7 +14,7 @@ namespace Pharmacy.Models
         
         public int Quantity { get; set; }
         public int ShelfId { get; set; }
-        public Shelf Shelf { get; set; }      
-        
+        public Shelf Shelf { get; set; }
+        public int MinQuantity { get; set; }
     }
 }
