@@ -12,7 +12,7 @@ namespace Pharmacy.Models
         public decimal Price { get; set; }
         public decimal Amount { get; set; }
         public decimal Discount { get; set; }
-        public int MedicineId { get; set; }
-        public Medicine Medicine { get; set; }
-    }
+        public int StockMedicineId { get; set; }
+        public StockMedicine StockMedicine { get; set; }
+        }
 }

@@ -17,7 +17,7 @@ namespace Pharmacy.Controllers
         // GET: Sales
         public ActionResult Index()
         {
-            var sales = db.Sales.Include(s => s.Medicine);
+            var sales = db.Sales.Include(s => s.StockMedicine);
             return View(sales.ToList());
         }
 
@@ -39,7 +39,7 @@ namespace Pharmacy.Controllers
         // GET: Sales/Create
         public ActionResult Create()
         {
-            ViewBag.MedicineId = new SelectList(db.Medicines, "Id", "Name");
+            ViewBag.StockMedicineId = new SelectList(db.StockMedicines, "Id", "Id");
             return View();
         }
 
@@ -48,7 +48,7 @@ namespace Pharmacy.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,SalesDate,Quantity,CustomerContact,CustomerName,Price,Amount,Discount,MedicineId")] Sales sales)
+        public ActionResult Create([Bind(Include = "Id,SalesDate,Quantity,CustomerContact,CustomerName,Price,Amount,Discount,StockMedicineId")] Sales sales)
         {
             if (ModelState.IsValid)
             {
@@ -57,7 +57,7 @@ namespace Pharmacy.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.MedicineId = new SelectList(db.Medicines, "Id", "Name", sales.MedicineId);
+            ViewBag.StockMedicineId = new SelectList(db.StockMedicines, "Id", "Id", sales.StockMedicineId);
             return View(sales);
         }
 
@@ -73,7 +73,7 @@ namespace Pharmacy.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.MedicineId = new SelectList(db.Medicines, "Id", "Name", sales.MedicineId);
+            ViewBag.StockMedicineId = new SelectList(db.StockMedicines, "Id", "Id", sales.StockMedicineId);
             return View(sales);
         }
 
@@ -82,7 +82,7 @@ namespace Pharmacy.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,SalesDate,Quantity,CustomerContact,CustomerName,Price,Amount,Discount,MedicineId")] Sales sales)
+        public ActionResult Edit([Bind(Include = "Id,SalesDate,Quantity,CustomerContact,CustomerName,Price,Amount,Discount,StockMedicineId")] Sales sales)
         {
             if (ModelState.IsValid)
             {
@@ -90,7 +90,7 @@ namespace Pharmacy.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.MedicineId = new SelectList(db.Medicines, "Id", "Name", sales.MedicineId);
+            ViewBag.StockMedicineId = new SelectList(db.StockMedicines, "Id", "Id", sales.StockMedicineId);
             return View(sales);
         }
 
